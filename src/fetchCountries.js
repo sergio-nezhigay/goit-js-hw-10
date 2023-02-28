@@ -8,6 +8,7 @@ function fetchCountries(name) {
       return response.json();
     })
     .catch(error => {
+      console.log(error);
       throw new Error(`Error fetching data: ${error.message}`);
     });
 }
