@@ -18,3 +18,30 @@ body {
   max-width: 320px;
   margin-bottom: 16px;
 }
+
+h2 {
+  margin: 0;
+  font-size: 54px;
+  line-height: 1;
+}
+
+.wrapper {
+  display: flex;
+  gap: 15px;
+  max-height: 50px;
+}
+
+.image {
+  height: auto;
+  width: 50px;
+  display: block;
+}
+
+.details {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.details-value {
+  font-weight: 400;
+}
