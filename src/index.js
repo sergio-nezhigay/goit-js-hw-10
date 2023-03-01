@@ -1,19 +1,26 @@
+import countryTml from './templates/country.hbs';
+import countriesTml from './templates/countries.hbs';
+
+import { fetchCountries } from './fetchCountries';
+
 import './css/styles.css';
+
 import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
 
 const MAX_COUNTRIES = 10;
 
-import { fetchCountries } from './fetchCountries';
-
-const DEBOUNCE_DELAY = 1000;
+const DEBOUNCE_DELAY = 300;
 const inputSearchEl = document.querySelector('input#search-box');
 const countryInfoEl = document.querySelector('.country-info');
+const countryListEl = document.querySelector('.country-list');
 
 inputSearchEl.addEventListener('input', debounce(onInput, DEBOUNCE_DELAY));
 
 function onInput(e) {
   const searchTerm = e.target.value.trim();
+  countryInfoEl.innerHTML = '';
+  countryListEl.innerHTML = '';
   if (searchTerm.length > 0)
     fetchCountries(searchTerm)
       .then(countries => processCountries(countries))
@@ -25,33 +32,20 @@ function onInput(e) {
 }
 
 function processCountries(countries) {
-  if (countries.length > MAX_COUNTRIES)
+  if (countries.length === 1) showCountry(countries[0]);
+  else if (countries.length <= MAX_COUNTRIES) showCountries(countries);
+  else
     Notiflix.Notify.info(
       'Too many matches found. Please enter a more specific name.'
     );
-  else if (countries.length === 1) showCountry(countries[0]);
-  else showCountries(countries);
   return;
 }
 
 function showCountries(countries) {
-  console.log(countries);
+  countryListEl.innerHTML = countriesTml(countries);
 }
 
 function showCountry(country) {
-  const markup = createCountryMarkup(country);
-  countryInfoEl.innerHTML = markup;
-}
-
-function createCountryMarkup({ capital, flags, name, languages, population }) {
-  return `
-          <div class="wrapper">
-            <img src="${flags?.svg}" alt="${name?.common}" class="image" />
-              <h2>${name?.common}</h2>
-          </div>
-          <p class="details">Capital: <span class="details-value">${capital}</span></p>
-          <p class="details">Population: <span class="details-value">${population}</span></p>
-          <p class="details">Languages: <span class="details-value">
-          ${Object.values(languages).join(', ')}</span></p>
-          `;
+  country.languagesString = Object.values(country.languages).join(', '); // Sorry couldn't do better :(
+  countryInfoEl.innerHTML = countryTml(country);
 }
