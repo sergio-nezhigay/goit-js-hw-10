@@ -1,9 +1,8 @@
-import './css/styles.css';
 import countryTemplate from './templates/country.hbs';
 import countriesTemplate from './templates/countries.hbs';
 
 import { FetchAPI } from './fetchCountries';
-
+import './css/styles.css';
 import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
 
