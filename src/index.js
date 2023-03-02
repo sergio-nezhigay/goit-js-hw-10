@@ -1,6 +1,6 @@
 import './css/styles.css';
-import countryTml from './templates/country.hbs';
-import countriesTml from './templates/countries.hbs';
+import countryTemplate from './templates/country.hbs';
+import countriesTemplate from './templates/countries.hbs';
 
 import { FetchAPI } from './fetchCountries';
 
@@ -47,9 +47,9 @@ function processCountries(countries) {
 
 function showCountry({ languages, ...country }) {
   const languagesString = Object.values(languages).join(', '); // Couldn't cope with handlebars helpers for iterating object keys/values :(
-  countryInfoEl.innerHTML = countryTml({ ...country, languagesString });
+  countryInfoEl.innerHTML = countryTemplate({ ...country, languagesString });
 }
 
 function showCountries(countries) {
-  countryListEl.innerHTML = countriesTml(countries);
+  countryListEl.innerHTML = countriesTemplate(countries);
 }
