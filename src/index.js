@@ -1,10 +1,10 @@
-import countryTemplate from './templates/country.hbs';
-// import countriesTemplate from './templates/countries.hbs';
-
-import { FetchAPI } from './fetchCountries';
 import './css/styles.css';
+
 import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
+
+import { FetchAPI } from './fetchCountries';
+import { countryMarkup, countriesMarkup } from './templates';
 
 const MAX_COUNTRIES = 10;
 const DEBOUNCE_DELAY = 300;
@@ -44,13 +44,10 @@ function processCountries(countries) {
   return;
 }
 
-function showCountry({ languages, ...country }) {
-  const languagesString = Object.values(languages).join(', '); // Couldn't cope with handlebars helpers for iterating object keys/values :(
-  // countryInfoEl.innerHTML = '<h1>test showCountry</h1>';
-  countryInfoEl.innerHTML = countryTemplate({ ...country, languagesString });
+function showCountry(country) {
+  countryInfoEl.innerHTML = countryMarkup(country);
 }
 
 function showCountries(countries) {
-  // countryListEl.innerHTML = countriesTemplate(countries);
-  countryListEl.innerHTML = '<h1>test showCountries</h1>';
+  countryListEl.innerHTML = countriesMarkup(countries);
 }
