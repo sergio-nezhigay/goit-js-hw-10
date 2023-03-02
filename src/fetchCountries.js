@@ -1,15 +1,19 @@
-const BASE_URL = 'https://restcountries.com/v3.1/name/';
-const FILTER_URL = '?fields=name,capital,population,flags,languages';
+class FetchAPI {
+  constructor(baseUrl, filterUrl) {
+    this.baseUrl = baseUrl;
+    this.filterUrl = filterUrl;
+  }
 
-function fetchCountries(name) {
-  return fetch(BASE_URL + name + FILTER_URL)
-    .then(response => {
-      if (!response.ok) throw new Error(response.status);
-      return response.json();
-    })
-    .catch(error => {
-      throw new Error(`Error fetching data: ${error.message}`);
-    });
+  fetchCountries(name) {
+    return fetch(this.baseUrl + name + this.filterUrl)
+      .then(response => {
+        if (!response.ok) throw new Error(response.status);
+        return response.json();
+      })
+      .catch(error => {
+        throw new Error(`Error fetching data: ${error.message}`);
+      });
+  }
 }
 
-export { fetchCountries };
+export { FetchAPI };

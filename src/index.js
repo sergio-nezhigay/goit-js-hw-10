@@ -1,19 +1,22 @@
+import './css/styles.css';
 import countryTml from './templates/country.hbs';
 import countriesTml from './templates/countries.hbs';
 
-import { fetchCountries } from './fetchCountries';
-
-import './css/styles.css';
+import { FetchAPI } from './fetchCountries';
 
 import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
 
 const MAX_COUNTRIES = 10;
-
 const DEBOUNCE_DELAY = 300;
+const BASE_URL = 'https://restcountries.com/v3.1/name/';
+const FILTER_URL = '?fields=name,capital,population,flags,languages';
+
 const inputSearchEl = document.querySelector('input#search-box');
 const countryInfoEl = document.querySelector('.country-info');
 const countryListEl = document.querySelector('.country-list');
+
+const countryAPI = new FetchAPI(BASE_URL, FILTER_URL);
 
 inputSearchEl.addEventListener('input', debounce(onInput, DEBOUNCE_DELAY));
 
@@ -22,7 +25,8 @@ function onInput(e) {
   countryInfoEl.innerHTML = '';
   countryListEl.innerHTML = '';
   if (searchTerm.length > 0)
-    fetchCountries(searchTerm)
+    countryAPI
+      .fetchCountries(searchTerm)
       .then(countries => processCountries(countries))
       .catch(err => {
         if (err.message.includes('404'))
@@ -41,11 +45,11 @@ function processCountries(countries) {
   return;
 }
 
-function showCountries(countries) {
-  countryListEl.innerHTML = countriesTml(countries);
+function showCountry({ languages, ...country }) {
+  const languagesString = Object.values(languages).join(', '); // Couldn't cope with handlebars helpers for iterating object keys/values :(
+  countryInfoEl.innerHTML = countryTml({ ...country, languagesString });
 }
 
-function showCountry(country) {
-  country.languagesString = Object.values(country.languages).join(', '); // Sorry couldn't do better :(
-  countryInfoEl.innerHTML = countryTml(country);
+function showCountries(countries) {
+  countryListEl.innerHTML = countriesTml(countries);
 }
