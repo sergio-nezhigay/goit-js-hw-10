@@ -21,17 +21,16 @@ inputSearchEl.addEventListener('input', debounce(onInput, DEBOUNCE_DELAY));
 
 function onInput(e) {
   const searchTerm = e.target.value.trim();
-  countryInfoEl.innerHTML = '';
-  countryListEl.innerHTML = '';
-  if (searchTerm.length > 0)
+  clearInfo();
+  if (searchTerm.length > 0) {
     countryAPI
       .fetchCountries(searchTerm)
       .then(countries => processCountries(countries))
-      .catch(err => {
-        if (err.message.includes('404'))
-          Notiflix.Notify.failure('Oops, there is no country with that name');
-        else Notiflix.Notify.failure(`Oops, an error occurred: ${err.message}`);
-      });
+      .catch(err =>
+        Notiflix.Notify.failure('Oops, there is no country with that name')
+      );
+  }
+  return;
 }
 
 function processCountries(countries) {
@@ -50,4 +49,9 @@ function showCountry(country) {
 
 function showCountries(countries) {
   countryListEl.innerHTML = countriesMarkup(countries);
+}
+
+function clearInfo() {
+  countryInfoEl.innerHTML = '';
+  countryListEl.innerHTML = '';
 }
